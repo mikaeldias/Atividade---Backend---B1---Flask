@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Editar "{{ task_list['name'] }}"{% endblock %}</h1>
+{% endblock %} {% block content %} {% for message in get_flashed_messages() %}
+<div class="flash-message">{{ message }}</div>
+{% endfor %}
+
+<form method="post" class="form-container">
+  <div class="form-group">
+    <label for="name">Nome da Lista</label>
+    <input
+      name="name"
+      id="name"
+      value="{{ request.form['name'] or task_list['name'] }}"
+      required
+    />
+  </div>
+
+  <div class="form-actions">
+    <input type="submit" value="Salvar Alterações" class="btn btn-primary" />
+  </div>
+</form>
+
+<hr class="form-separator" />
+
+<form
+  action="{{ url_for('listagem.delete_list', id=task_list['id']) }}"
+  method="post"
+  class="delete-form"
+>
+  <input
+    class="btn btn-danger delete-button"
+    type="submit"
+    value="Excluir Lista"
+    onclick="return confirm('Tem certeza que deseja excluir esta lista e TODAS as suas tarefas permanentemente?');"
+  />
+</form>
+
+<p class="back-link">
+  <a href="{{ url_for('listagem.index') }}">Voltar para Listas</a>
+</p>
+{% endblock %}

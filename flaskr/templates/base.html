@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} - Minha Lista de Tarefas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <nav class="main-nav">
+    <div class="nav-brand">
+      <h1><a href="{{ url_for('listagem.index') }}">Minhas Tarefas</a></h1>
+    </div>
+    <ul class="nav-links">
+      {% if g.user %}
+        <li class="nav-item">
+          <a href="{{ url_for('auth.profile') }}">Olá, {{ g.user['username'] }}!</a> {# Link para o perfil #}
+        </li>
+        <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+      {% else %}
+        <li class="nav-item"><a href="{{ url_for('auth.register') }}">Registrar</a></li>
+        <li class="nav-item"><a href="{{ url_for('auth.login') }}">Entrar</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <section class="content">
+    <header class="page-header">
+      {% block header %}{% endblock %}
+    </header>
+
+    {% set flashed_messages = session.pop('_flashes', []) %}
+    {% for category, message in flashed_messages %}
+      <div class="flash-message flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </section>
+</body>
+</html>

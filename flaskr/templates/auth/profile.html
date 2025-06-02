@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Meu Perfil{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="profile-card">
+    <div class="profile-item">
+      <strong>Nome de Usuário:</strong> {{ user['username'] }}
+    </div>
+
+    <div class="profile-actions">
+      <a href="{{ url_for('auth.edit_profile') }}" class="btn btn-primary">Editar Perfil</a>
+    </div>
+
+    <p class="back-link">
+      <a href="{{ url_for('listagem.index') }}">Voltar para Minhas Listas</a>
+    </p>
+  </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Tarefas em "{{ task_list['name'] }}"{% endblock %}</h1>
+{% if g.user %}
+<a
+  class="action-button"
+  href="{{ url_for('listagem.create_task', list_id=task_list['id']) }}"
+  >Nova Tarefa</a
+>
+{% endif %} {% endblock %} {% block content %} {% for message in
+get_flashed_messages() %}
+<div class="flash-message">{{ message }}</div>
+{% endfor %} {% if tasks %}
+<ul class="tasks-list">
+  {% for task in tasks %}
+  <li class="task-item {% if task['completed'] %}completed{% endif %}">
+    <div class="task-description">
+      <h3 class="task-title">{{ task['description'] }}</h3>
+      <div class="task-meta">
+        Criada em
+        <span class="task-date"
+          >{{ task['created'].strftime('%Y-%m-%d') }}</span
+        >
+      </div>
+    </div>
+    {% if g.user and g.user['id'] == task['author_id'] %}
+    <div class="task-actions">
+      <a
+        class="action-button"
+        href="{{ url_for('listagem.update_task', id=task['id']) }}"
+        >Editar Tarefa</a
+      >
+      <form
+        action="{{ url_for('listagem.delete_task', id=task['id']) }}"
+        method="post"
+        class="delete-form"
+      >
+        <input
+          type="submit"
+          value="Excluir Tarefa"
+          class="action-button delete-button"
+          onclick="return confirm('Tem certeza que deseja excluir esta tarefa?');"
+        />
+      </form>
+    </div>
+    {% endif %}
+  </li>
+  {% if not loop.last %}
+  <hr class="task-separator" />
+  {% endif %} {% endfor %}
+</ul>
+{% else %}
+<p class="no-items-message">
+  Nenhuma tarefa encontrada para esta lista. Adicione uma!
+</p>
+{% endif %}
+
+<p class="back-link">
+  <a href="{{ url_for('listagem.index') }}">Voltar para Listas de Tarefas</a>
+</p>
+{% endblock %}

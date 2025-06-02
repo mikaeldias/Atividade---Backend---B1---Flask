@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Entrar{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% for category, message in get_my_flashed_messages(with_categories=True) %}
+    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+  {% endfor %}
+
+  <form method="post" class="auth-form">
+    <div class="form-group">
+      <label for="username">Nome de Usuário</label>
+      <input name="username" id="username" value="{{ request.form['username'] or '' }}" required autocomplete="username" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" name="password" id="password" required autocomplete="current-password" />
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Entrar" class="btn btn-primary" />
+    </div>
+
+    <p class="register-link">
+      Não tem uma conta? <a href="{{ url_for('auth.register') }}">Registre-se aqui</a>.
+    </p>
+  </form>
+{% endblock %}

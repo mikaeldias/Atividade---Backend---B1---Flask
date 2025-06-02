@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Criar Nova Lista de Tarefas{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% for message in get_flashed_messages() %}
+    <div class="flash-message">{{ message }}</div>
+  {% endfor %}
+
+  <form method="post" class="form-container">
+    <div class="form-group">
+      <label for="name">Nome da Lista</label>
+      <input name="name" id="name" value="{{ request.form['name'] or '' }}" required />
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar Lista" class="btn btn-primary" />
+    </div>
+
+    <p class="back-link">
+      <a href="{{ url_for('listagem.index') }}">Voltar para Listas</a>
+    </p>
+  </form>
+{% endblock %}

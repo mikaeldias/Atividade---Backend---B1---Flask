@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Minhas Listas de Tarefas{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action-button" href="{{ url_for('listagem.create_list') }}">Nova Lista</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {# AQUI NÃO PRECISA MUDAR MAIS NADA, POIS JÁ VEM DO BASE.HTML #}
+  {# A linha com {% for category, message in get_my_flashed_messages(with_categories=True) %}
+     vai ser herdada do base.html e está sendo chamada lá.
+     Remova se tiver sido copiado do base.html para aqui. #}
+
+  {% if task_lists %}
+    {% for task_list in task_lists %}
+      <article class="list-item">
+        <header class="list-header">
+          <div class="list-info">
+            <h2 class="list-title">
+              <a href="{{ url_for('listagem.tasks_in_list', list_id=task_list['id']) }}">{{ task_list['name'] }}</a>
+            </h2>
+            <div class="list-meta">
+              Criada por <span class="list-author">{{ task_list['username'] }}</span> em <span class="list-date">{{ task_list['created'].strftime('%Y-%m-%d') }}</span>
+            </div>
+          </div>
+          {% if g.user and g.user['id'] == task_list['author_id'] %}
+            <div class="list-actions">
+              <a class="action-button" href="{{ url_for('listagem.update_list', id=task_list['id']) }}">Editar Lista</a>
+              <form action="{{ url_for('listagem.delete_list', id=task_list['id']) }}" method="post" class="delete-form">
+                <input type="submit" value="Excluir Lista" class="action-button delete-button" onclick="return confirm('Tem certeza que deseja excluir esta lista e TODAS as suas tarefas?');">
+              </form>
+            </div>
+          {% endif %}
+        </header>
+      </article>
+      {% if not loop.last %}
+        <hr class="list-separator" />
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <p class="no-items-message">Você ainda não tem nenhuma lista de tarefas. Crie uma nova para começar!</p>
+  {% endif %}
+{% endblock %}

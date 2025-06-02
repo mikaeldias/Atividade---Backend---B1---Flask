@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Editar Perfil{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" class="form-container">
+    <div class="form-group">
+      <label for="username">Novo Nome de Usuário</label>
+      <input
+        name="username"
+        id="username"
+        value="{{ request.form['username'] or user['username'] }}"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Nova Senha (deixe em branco para não alterar)</label>
+      <input type="password" name="password" id="password" autocomplete="new-password" />
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" value="Salvar Alterações" class="btn btn-primary" />
+    </div>
+  </form>
+
+  <hr class="form-separator" />
+
+  {# Formulário para exclusão de conta #}
+  <form action="{{ url_for('auth.delete_profile') }}" method="post" class="delete-form">
+    <input
+      class="btn btn-danger delete-button"
+      type="submit"
+      value="Excluir Conta Permanentemente"
+      onclick="return confirm('Tem certeza que deseja excluir sua conta? Todas as suas listas e tarefas serão perdidas.');"
+    />
+  </form>
+
+  <p class="back-link">
+    <a href="{{ url_for('auth.profile') }}">Voltar para Meu Perfil</a>
+  </p>
+{% endblock %}

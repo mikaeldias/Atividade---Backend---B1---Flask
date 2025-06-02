@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Posts do Blog{% endblock %}</h1>
+{# Título traduzido #} {% if g.user %} {# Link para criar novo post, com texto
+traduzido #}
+<a class="action-button" href="{{ url_for('blog.create') }}">Novo Post</a>
+{% endif %} {% endblock %} {% block content %} {% for
+message in get_flashed_messages() %}
+<div class="flash-message">{{ message }}</div>
+{% endfor %} {# Verifica se há posts para exibir #} {% if posts %} {% for post
+in posts %}
+<article class="post-item">
+  <header class="post-header">
+    <div class="post-info">
+      <h2 class="post-title">{{ post['title'] }}</h2>
+      <div class="post-meta">
+        Por <span class="post-author">{{ post['username'] }}</span> em
+        <span class="post-date"
+          >{{ post['created'].strftime('%Y-%m-%d') }}</span
+        >
+      </div>
+    </div>
+    {% if g.user and g.user['id'] == post['author_id'] %} {# Condição para
+    mostrar botão de edição/exclusão #}
+    <div class="post-actions">
+      <a
+        class="action-button"
+        href="{{ url_for('blog.update', id=post['id']) }}"
+        >Editar</a
+      >
+      {# Texto traduzido #} {# O botão de deletar geralmente é um formulário
+      POST separado para segurança, conforme tutorial #}
+      <form
+        action="{{ url_for('blog.delete', id=post['id']) }}"
+        method="post"
+        class="delete-form"
+      >
+        <input
+          type="submit"
+          value="Excluir"
+          class="action-button delete-button"
+          onclick="return confirm('Tem certeza que deseja excluir este post?');"
+        />
+      </form>
+    </div>
+    {% endif %}
+  </header>
+  <p class="post-body">{{ post['body'] }}</p>
+</article>
+{% if not loop.last %}
+<hr class="post-separator" />
+{# Adicionada classe para o separador #} {% endif %} {% endfor %} {% else %} {#
+Mensagem se não houver posts #}
+<p class="no-posts-message">Ainda não há posts. Seja o primeiro a criar um!</p>
+{% endif %} {% endblock %}
